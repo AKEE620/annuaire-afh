@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Annuaire Interne - Afriland First Holding</title>
+    <meta name="theme-color" content="#800020">
+    <meta name="description" content="Annuaire officiel des collaborateurs d'Afriland First Holding">
+
+    <!-- Police Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bordeaux: #800020;
+            --bordeaux-hover: #5a0017;
+            --bordeaux-light: rgba(128, 0, 32, 0.08);
+            --dark-gray: #2D2D2D;
+            --black: #121212;
+            --light-bg: #F4F6F8;
+            --white: #FFFFFF;
+            --border-color: #E2E8F0;
+            
+            /* Ombres 3D */
+            --shadow-3d: 0 10px 25px -5px rgba(128, 0, 32, 0.12), 0 8px 10px -6px rgba(0, 0, 0, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+            --shadow-3d-hover: 0 20px 35px -8px rgba(128, 0, 32, 0.22), 0 12px 18px -8px rgba(0, 0, 0, 0.12), inset 0 1px 0 rgba(255, 255, 255, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: var(--light-bg);
+            color: var(--dark-gray);
+            padding-bottom: 60px;
+        }
+
+        /* EN-TÊTE STICKY SUR FOND CLAIR */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background-color: var(--white);
+            border-bottom: 3px solid var(--bordeaux);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+            padding: 12px 24px;
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .brand-section {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .logo-img {
+            height: 52px;
+            width: auto;
+            object-fit: contain;
+        }
+
+        .brand-text h1 {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: var(--black);
+            letter-spacing: -0.3px;
+            line-height: 1.2;
+        }
+
+        .brand-text p {
+            font-size: 0.8rem;
+            color: var(--bordeaux);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .header-status {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .badge-admin {
+            display: none;
+            background-color: var(--bordeaux);
+            color: var(--white);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-logout {
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.8);
+            cursor: pointer;
+            text-decoration: underline;
+            font-size: 0.7rem;
+            margin-left: 4px;
+        }
+
+        .btn-logout:hover {
+            color: var(--white);
+        }
+
+        .btn-install {
+            display: none;
+            background-color: var(--black);
+            color: var(--white);
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .btn-install:hover {
+            transform: scale(1.04);
+        }
+
+        /* BARRE D'OUTILS DE RECHERCHE ET ACTIONS ADMIN */
+        .toolbar {
+            max-width: 1200px;
+            margin: 24px auto 12px auto;
+            padding: 0 20px;
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 280px;
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 14px 18px 14px 44px;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            font-size: 0.95rem;
+            background-color: var(--white);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        .search-box input:focus {
+            border-color: var(--bordeaux);
+            box-shadow: 0 4px 12px rgba(128, 0, 32, 0.12);
+        }
+
+        .search-svg {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 18px;
+            height: 18px;
+            stroke: #888;
+        }
+
+        .admin-controls {
+            display: none;
+            gap: 10px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--bordeaux), var(--bordeaux-hover));
+            color: var(--white);
+            border: none;
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.88rem;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(128, 0, 32, 0.25);
+            transition: all 0.2s;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(128, 0, 32, 0.35);
+        }
+
+        .btn-secondary {
+            background: var(--white);
+            color: var(--dark-gray);
+            border: 1px solid var(--border-color);
+            padding: 12px 16px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.88rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-secondary:hover {
+            background-color: #E2E8F0;
+        }
+
+        .counter-badge {
+            font-size: 0.85rem;
+            color: #666;
+            padding: 0 20px;
+            max-width: 1200px;
+            margin: 0 auto 12px auto;
+            font-weight: 500;
+        }
+
+        /* GRILLE DE CARTES 3D */
+        .directory-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 10px 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+            gap: 22px;
+            perspective: 1000px;
+        }
+
+        /* CARTE COLLABORATEUR EN RELIEF 3D */
+        .card-3d {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 22px;
+            box-shadow: var(--shadow-3d);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            border-top: 3px solid var(--bordeaux);
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            position: relative;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            transform-style: preserve-3d;
+        }
+
+        .card-3d:hover {
+            transform: translateY(-6px) rotateX(2deg);
+            box-shadow: var(--shadow-3d-hover);
+        }
+
+        /* AVATAR PHOTO EN RELIEF */
+        .avatar-frame {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            border: 3px solid var(--bordeaux);
+            box-shadow: 0 6px 14px rgba(128, 0, 32, 0.2), inset 0 2px 4px rgba(0,0,0,0.1);
+            flex-shrink: 0;
+            overflow: hidden;
+            background: linear-gradient(135deg, #F8F9FA, #E9ECEF);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            color: var(--bordeaux);
+            font-size: 1.3rem;
+            position: relative;
+        }
+
+        .avatar-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .card-details {
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .card-details .name {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--black);
+            margin-bottom: 2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .card-details .code {
+            font-size: 0.75rem;
+            color: #666;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        /* BOUTON D'APPEL WAVE */
+        .phone-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background-color: var(--bordeaux-light);
+            color: var(--bordeaux);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.88rem;
+            text-decoration: none;
+            transition: all 0.2s;
+            box-shadow: 0 2px 6px rgba(128, 0, 32, 0.08);
+        }
+
+        .phone-button:hover {
+            background-color: var(--bordeaux);
+            color: var(--white);
+            transform: scale(1.03);
+        }
+
+        .phone-svg {
+            width: 14px;
+            height: 14px;
+            fill: currentColor;
+        }
+
+        /* BOUTONS D'ACTION ADMIN SUR LA CARTE */
+        .admin-card-actions {
+            display: none;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            gap: 6px;
+        }
+
+        .btn-card-action {
+            background: rgba(226, 232, 240, 0.8);
+            border: none;
+            border-radius: 6px;
+            width: 28px;
+            height: 28px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .btn-card-action.edit:hover {
+            background: var(--bordeaux);
+            color: var(--white);
+        }
+
+        .btn-card-action.delete:hover {
+            background: #EF4444;
+            color: var(--white);
+        }
+
+        .btn-card-action svg {
+            width: 14px;
+            height: 14px;
+            stroke: currentColor;
+            stroke-width: 2;
+            fill: none;
+        }
+
+        /* MODALES */
+        .modal-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.55);
+            backdrop-filter: blur(4px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            padding: 20px;
+        }
+
+        .modal-box {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 28px;
+            max-width: 450px;
+            width: 100%;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+            border-top: 5px solid var(--bordeaux);
+        }
+
+        .modal-box h2 {
+            font-size: 1.25rem;
+            color: var(--black);
+            margin-bottom: 18px;
+            font-weight: 700;
+        }
+
+        .form-field {
+            margin-bottom: 16px;
+        }
+
+        .form-field label {
+            display: block;
+            font-size: 0.82rem;
+            font-weight: 700;
+            margin-bottom: 6px;
+            color: var(--dark-gray);
+            text-transform: uppercase;
+        }
+
+        .form-field input {
+            width: 100%;
+            padding: 12px;
+            border: 1.5px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 0.95rem;
+            outline: none;
+        }
+
+        .form-field input:focus {
+            border-color: var(--bordeaux);
+        }
+
+        .photo-preview-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: 8px;
+        }
+
+        .photo-preview {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--bordeaux);
+            display: none;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 24px;
+        }
+
+        /* TRIGGER SECRET 3 CLICS (COIN INFÉRIEUR DROIT) */
+        #secretAdminTrigger {
+            position: fixed;
+            bottom: 0;
+            right: 0;
+            width: 40px;
+            height: 40px;
+            z-index: 9999;
+            cursor: pointer;
+            opacity: 0.02;
+            background-color: var(--bordeaux);
+            border-radius: 50% 0 0 0;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- EN-TÊTE STICKY SUR FOND CLAIR -->
+    <header>
+        <div class="header-container">
+            <div class="brand-section">
+                <img src="LOGO_AFH.jpeg" alt="Logo Afriland First Holding" class="logo-img" onerror="this.style.display='none'">
+                <div class="brand-text">
+                    <h1>Afriland First Holding</h1>
+                    <p>Annuaire Interne des Collaborateurs</p>
+                </div>
+            </div>
+            
+            <div class="header-status">
+                <button id="pwaInstallBtn" class="btn-install" onclick="installPwa()">Installer l'application</button>
+                <div id="adminBadge" class="badge-admin">
+                    <span>MODE ADMINISTRATEUR</span>
+                    <button class="btn-logout" onclick="logoutAdmin()">Quitter</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- BARRE DE RECHERCHE ET ACTIONS ADMIN -->
+    <div class="toolbar">
+        <div class="search-box">
+            <svg class="search-svg" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input type="text" id="searchInput" placeholder="Rechercher par nom, code ou poste (ex: 100)..." oninput="filterGrid()">
+        </div>
+
+        <div id="adminControls" class="admin-controls">
+            <button class="btn-primary" onclick="openAddModal()">Nouveau Collaborateur</button>
+            <button class="btn-secondary" onclick="exportData()" title="Sauvegarder la base de données">Exporter</button>
+            <button class="btn-secondary" onclick="triggerImport()" title="Importer une sauvegarde">Importer</button>
+            <input type="file" id="importFileInput" accept=".json" style="display:none" onchange="importData(event)">
+        </div>
+    </div>
+
+    <div id="counterBadge" class="counter-badge">14 collaborateurs répertoriés</div>
+
+    <!-- GRILLE DE CARTES COLLABORATEURS EN 3D -->
+    <main class="directory-grid" id="directoryGrid"></main>
+
+    <!-- ZONE DE DECLENCHEMENT SECRET (3 CLICS EN BAS À DROITE) -->
+    <div id="secretAdminTrigger" onclick="handleSecretClick()" title="Zone Administrateur"></div>
+
+    <!-- MODALE D'AUTHENTIFICATION ADMIN -->
+    <div class="modal-backdrop" id="authModal">
+        <div class="modal-box">
+            <h2>Accès Administrateur</h2>
+            <p style="font-size:0.85rem; color:#666; margin-bottom:16px;">Veuillez saisir le mot de passe pour modifier l'annuaire.</p>
+            <form onsubmit="authenticateAdmin(event)">
+                <div class="form-field">
+                    <label for="adminPassInput">Mot de passe</label>
+                    <input type="password" id="adminPassInput" placeholder="Mot de passe admin (par défaut: afriland)" required autofocus>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-secondary" onclick="closeAuthModal()">Annuler</button>
+                    <button type="submit" class="btn-primary">Se connecter</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODALE D'AJOUT / ÉDITION DE COLLABORATEUR -->
+    <div class="modal-backdrop" id="memberModal">
+        <div class="modal-box">
+            <h2 id="modalTitle">Ajouter un Collaborateur</h2>
+            <form id="memberForm" onsubmit="saveMember(event)">
+                <input type="hidden" id="editMemberId">
+                <div class="form-field">
+                    <label for="inputInitials">Code / Initiales (ex: GF)</label>
+                    <input type="text" id="inputInitials" required placeholder="ex: BA">
+                </div>
+                <div class="form-field">
+                    <label for="inputName">Nom & Prénom</label>
+                    <input type="text" id="inputName" required placeholder="ex: Guy Laurent FONDJO">
+                </div>
+                <div class="form-field">
+                    <label for="inputExt">Poste Interne</label>
+                    <input type="text" id="inputExt" required placeholder="ex: 100">
+                </div>
+                <div class="form-field">
+                    <label for="inputFile">Photo de profil</label>
+                    <input type="file" id="inputFile" accept="image/*" style="margin-bottom:8px;" onchange="previewSelectedPhoto(event)">
+                    <input type="url" id="inputPhotoUrl" placeholder="ou URL de l'image (HTTP/HTTPS)" oninput="previewUrlPhoto(this.value)">
+                    
+                    <div class="photo-preview-container">
+                        <img id="modalPhotoPreview" class="photo-preview" alt="Aperçu">
+                        <button type="button" id="btnRemovePhoto" style="display:none; color:#EF4444; background:none; border:none; font-size:0.8rem; cursor:pointer;" onclick="clearPhotoInModal()">Supprimer la photo</button>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-secondary" onclick="closeMemberModal()">Annuler</button>
+                    <button type="submit" class="btn-primary">Enregistrer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // DONNÉES INITIALES DES COLLABORATEURS
+        const defaultMembers = [
+            { id: "1", initials: "GF", name: "Guy Laurent FONDJO", ext: "100", photo: "" },
+            { id: "2", initials: "CD", name: "Christiana DJONDO", ext: "101", photo: "" },
+            { id: "3", initials: "FB", name: "Frederick BOCCO", ext: "102", photo: "" },
+            { id: "4", initials: "BA", name: "BATCHOUDI", ext: "103", photo: "" },
+            { id: "5", initials: "FM", name: "Francoise MAKPALIBE", ext: "104", photo: "" },
+            { id: "6", initials: "KO", name: "KOLOU", ext: "106", photo: "" },
+            { id: "7", initials: "TA", name: "TANKRI", ext: "107", photo: "" },
+            { id: "8", initials: "DO", name: "DOUTI", ext: "108", photo: "" },
+            { id: "9", initials: "HK", name: "Hamza AFFO KOLI", ext: "110", photo: "" },
+            { id: "10", initials: "HB", name: "Herve BAMBO", ext: "111", photo: "" },
+            { id: "11", initials: "MS", name: "Maurice SIMO", ext: "112", photo: "" },
+            { id: "12", initials: "SD", name: "Sylvain DEUKAM", ext: "113", photo: "" },
+            { id: "13", initials: "SS", name: "Somfo SOMFO", ext: "114", photo: "" },
+            { id: "14", initials: "VD", name: "Victorin DAGBA", ext: "115", photo: "" }
+        ];
+
+        // STOCKAGE LOCAL
+        function getStoredMembers() {
+            const data = localStorage.getItem("afriland_db_v3");
+            if (data) return JSON.parse(data);
+            localStorage.setItem("afriland_db_v3", JSON.stringify(defaultMembers));
+            return defaultMembers;
+        }
+
+        function saveStoredMembers(members) {
+            localStorage.setItem("afriland_db_v3", JSON.stringify(members));
+        }
+
+        let membersList = getStoredMembers();
+        let isAdmin = sessionStorage.getItem("afriland_admin_logged") === "true";
+        let currentPhotoData = "";
+
+        // FONCTION POUR DÉCLENCHER L'APPEL WAVE
+        function makeWaveCall(ext, e) {
+            e.preventDefault();
+            // Lancement du protocole Wave (wave:POSTE)
+            window.location.href = `wave:${ext}`;
+            
+            // Fallback pour les systèmes configurés avec tel:
+            setTimeout(() => {
+                window.location.href = `tel:${ext}`;
+            }, 500);
+        }
+
+        // AFFICHAGE DES CARTES
+        function renderGrid(data) {
+            const grid = document.getElementById("directoryGrid");
+            const counter = document.getElementById("counterBadge");
+            grid.innerHTML = "";
+
+            counter.innerText = `${data.length} collaborateur${data.length > 1 ? 's' : ''} répertorié${data.length > 1 ? 's' : ''}`;
+
+            if (data.length === 0) {
+                grid.innerHTML = `<div style="grid-column: 1/-1; text-align:center; padding:40px; color:#888;">Aucun collaborateur trouvé.</div>`;
+                return;
+            }
+
+            data.sort((a, b) => parseInt(a.ext) - parseInt(b.ext));
+
+            data.forEach(m => {
+                const card = document.createElement("div");
+                card.className = "card-3d";
+
+                const avatarContent = m.photo 
+                    ? `<img src="${m.photo}" alt="${m.name}" class="avatar-img">` 
+                    : `<span>${m.initials}</span>`;
+
+                card.innerHTML = `
+                    <div class="admin-card-actions">
+                        <button class="btn-card-action edit" title="Modifier" onclick="openEditModal('${m.id}')">
+                            <svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                        </button>
+                        <button class="btn-card-action delete" title="Supprimer" onclick="deleteMember('${m.id}')">
+                            <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                        </button>
+                    </div>
+
+                    <div class="avatar-frame">${avatarContent}</div>
+                    
+                    <div class="card-details">
+                        <div class="name" title="${m.name}">${m.name}</div>
+                        <div class="code">Code: ${m.initials}</div>
+                        <a href="wave:${m.ext}" onclick="makeWaveCall('${m.ext}', event)" class="phone-button" title="Appeler via Wave">
+                            <svg class="phone-svg" viewBox="0 0 24 24">
+                                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                            </svg>
+                            Poste ${m.ext}
+                        </a>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+
+            document.querySelectorAll('.admin-card-actions').forEach(el => el.style.display = isAdmin ? 'flex' : 'none');
+        }
+
+        // RECHERCHE EN TEMPS RÉEL
+        function filterGrid() {
+            const query = document.getElementById("searchInput").value.toLowerCase().trim();
+            const filtered = membersList.filter(m => 
+                m.name.toLowerCase().includes(query) ||
+                m.initials.toLowerCase().includes(query) ||
+                m.ext.includes(query)
+            );
+            renderGrid(filtered);
+        }
+
+        // ZONE SECRÈTE DE CONNEXION (3 CLICS)
+        let clickCount = 0;
+        let clickTimer = null;
+
+        function handleSecretClick() {
+            clickCount++;
+            if (clickCount === 1) {
+                clickTimer = setTimeout(() => { clickCount = 0; }, 2000);
+            } else if (clickCount >= 3) {
+                clearTimeout(clickTimer);
+                clickCount = 0;
+                if (!isAdmin) {
+                    openAuthModal();
+                }
+            }
+        }
+
+        // AUTHENTIFICATION
+        function openAuthModal() {
+            document.getElementById("authModal").style.display = "flex";
+            document.getElementById("adminPassInput").focus();
+        }
+
+        function closeAuthModal() {
+            document.getElementById("authModal").style.display = "none";
+            document.getElementById("adminPassInput").value = "";
+        }
+
+        function authenticateAdmin(e) {
+            e.preventDefault();
+            const pass = document.getElementById("adminPassInput").value;
+            const savedPass = localStorage.getItem("afriland_admin_password") || "afriland";
+
+            if (pass === savedPass) {
+                isAdmin = true;
+                sessionStorage.setItem("afriland_admin_logged", "true");
+                updateAdminUi();
+                closeAuthModal();
+            } else {
+                alert("Mot de passe incorrect.");
+            }
+        }
+
+        function logoutAdmin() {
+            isAdmin = false;
+            sessionStorage.removeItem("afriland_admin_logged");
+            updateAdminUi();
+        }
+
+        function updateAdminUi() {
+            document.getElementById("adminControls").style.display = isAdmin ? "flex" : "none";
+            document.getElementById("adminBadge").style.display = isAdmin ? "inline-flex" : "none";
+            renderGrid(membersList);
+        }
+
+        // GESTION MODALE (AJOUT & MODIFICATION)
+        function openAddModal() {
+            document.getElementById("modalTitle").innerText = "Ajouter un Collaborateur";
+            document.getElementById("memberForm").reset();
+            document.getElementById("editMemberId").value = "";
+            currentPhotoData = "";
+            updatePhotoPreview("");
+            document.getElementById("memberModal").style.display = "flex";
+        }
+
+        function openEditModal(id) {
+            const member = membersList.find(m => m.id === id);
+            if (!member) return;
+
+            document.getElementById("modalTitle").innerText = "Modifier le Collaborateur";
+            document.getElementById("editMemberId").value = member.id;
+            document.getElementById("inputInitials").value = member.initials;
+            document.getElementById("inputName").value = member.name;
+            document.getElementById("inputExt").value = member.ext;
+            
+            document.getElementById("inputFile").value = "";
+            document.getElementById("inputPhotoUrl").value = member.photo.startsWith("http") ? member.photo : "";
+            
+            currentPhotoData = member.photo || "";
+            updatePhotoPreview(currentPhotoData);
+
+            document.getElementById("memberModal").style.display = "flex";
+        }
+
+        function closeMemberModal() {
+            document.getElementById("memberModal").style.display = "none";
+        }
+
+        // PREVISUALISATION PHOTO
+        function previewSelectedPhoto(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (evt) => {
+                    currentPhotoData = evt.target.result;
+                    updatePhotoPreview(currentPhotoData);
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function previewUrlPhoto(url) {
+            if (url) {
+                currentPhotoData = url;
+                updatePhotoPreview(url);
+            }
+        }
+
+        function updatePhotoPreview(src) {
+            const preview = document.getElementById("modalPhotoPreview");
+            const btnRemove = document.getElementById("btnRemovePhoto");
+            if (src) {
+                preview.src = src;
+                preview.style.display = "block";
+                btnRemove.style.display = "inline-block";
+            } else {
+                preview.style.display = "none";
+                btnRemove.style.display = "none";
+            }
+        }
+
+        function clearPhotoInModal() {
+            currentPhotoData = "";
+            document.getElementById("inputFile").value = "";
+            document.getElementById("inputPhotoUrl").value = "";
+            updatePhotoPreview("");
+        }
+
+        // SAUVEGARDER (AJOUT OU ÉDITION)
+        async function saveMember(e) {
+            e.preventDefault();
+            const editId = document.getElementById("editMemberId").value;
+            const initials = document.getElementById("inputInitials").value.toUpperCase().trim();
+            const name = document.getElementById("inputName").value.trim();
+            const ext = document.getElementById("inputExt").value.trim();
+
+            if (editId) {
+                // Mode Modification
+                const index = membersList.findIndex(m => m.id === editId);
+                if (index !== -1) {
+                    membersList[index] = {
+                        ...membersList[index],
+                        initials,
+                        name,
+                        ext,
+                        photo: currentPhotoData
+                    };
+                }
+            } else {
+                // Mode Ajout
+                const newMember = {
+                    id: Date.now().toString(),
+                    initials,
+                    name,
+                    ext,
+                    photo: currentPhotoData
+                };
+                membersList.push(newMember);
+            }
+
+            saveStoredMembers(membersList);
+            filterGrid();
+            closeMemberModal();
+        }
+
+        function deleteMember(id) {
+            if (confirm("Confirmer la suppression de ce collaborateur ?")) {
+                membersList = membersList.filter(m => m.id !== id);
+                saveStoredMembers(membersList);
+                filterGrid();
+            }
+        }
+
+        // EXPORTATION ET IMPORTATION
+        function exportData() {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(membersList, null, 2));
+            const downloadAnchor = document.createElement('a');
+            downloadAnchor.setAttribute("href", dataStr);
+            downloadAnchor.setAttribute("download", "annuaire_afriland_sauvegarde.json");
+            document.body.appendChild(downloadAnchor);
+            downloadAnchor.click();
+            downloadAnchor.remove();
+        }
+
+        function triggerImport() {
+            document.getElementById("importFileInput").click();
+        }
+
+        function importData(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(evt) {
+                try {
+                    const imported = JSON.parse(evt.target.result);
+                    if (Array.isArray(imported)) {
+                        membersList = imported;
+                        saveStoredMembers(membersList);
+                        renderGrid(membersList);
+                        alert("Importation réussie.");
+                    }
+                } catch(err) {
+                    alert("Fichier JSON invalide.");
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        // PWA ET SERVICE WORKER
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            document.getElementById('pwaInstallBtn').style.display = 'inline-block';
+        });
+
+        function installPwa() {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then(() => {
+                    deferredPrompt = null;
+                    document.getElementById('pwaInstallBtn').style.display = 'none';
+                });
+            }
+        }
+
+        if ('serviceWorker' in navigator) {
+            const swCode = `
+                const CACHE = 'afriland-cache-v3';
+                self.addEventListener('install', e => {
+                    e.waitUntil(caches.open(CACHE).then(cache => cache.addAll(['./'])));
+                    self.skipWaiting();
+                });
+                self.addEventListener('fetch', e => {
+                    e.respondWith(caches.match(e.request).then(res => res || fetch(e.request).catch(() => caches.match('./'))));
+                });
+            `;
+            const blob = new Blob([swCode], { type: 'application/javascript' });
+            navigator.serviceWorker.register(URL.createObjectURL(blob)).catch(() => {});
+        }
+
+        // INITIALISATION
+        updateAdminUi();
+    </script>
+</body>
+</html>
