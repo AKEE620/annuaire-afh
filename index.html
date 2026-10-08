@@ -160,6 +160,43 @@
             color: var(--white);
         }
 
+        /* BOUTON RÉGLAGES D'APPEL (visible par tous) */
+        .btn-call-settings {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--white);
+            color: var(--dark-gray);
+            border: 1px solid var(--border-color);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .btn-call-settings:hover {
+            border-color: var(--bordeaux);
+            color: var(--bordeaux);
+        }
+
+        .btn-call-settings svg {
+            width: 14px;
+            height: 14px;
+            stroke: currentColor;
+            stroke-width: 2;
+            fill: none;
+        }
+
+        .test-row {
+            display: flex;
+            gap: 8px;
+        }
+
+        .test-row input {
+            flex: 1;
+        }
+
         .btn-install {
             display: none;
             background-color: var(--black);
@@ -174,7 +211,7 @@
         }
 
         .btn-install:hover {
-            transform: scale(1.04);
+            background-color: #333;
         }
 
         /* BARRE D'OUTILS DE RECHERCHE ET ACTIONS ADMIN */
@@ -242,7 +279,6 @@
         }
 
         .btn-primary:hover {
-            transform: translateY(-2px);
             box-shadow: 0 6px 16px rgba(128, 0, 32, 0.35);
         }
 
@@ -285,7 +321,6 @@
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
             gap: 22px;
-            perspective: 1000px;
         }
 
         /* CARTE COLLABORATEUR EN RELIEF 3D */
@@ -300,13 +335,16 @@
             align-items: center;
             gap: 18px;
             position: relative;
-            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-            transform-style: preserve-3d;
+            /* Seules l'ombre et la bordure s'animent : la carte ne bouge plus sous
+               le curseur (le déplacement 3D au survol faisait « vibrer » le pointeur
+               et rendait le clic sur le poste aléatoire). */
+            transition: box-shadow 0.25s ease, border-color 0.25s ease;
         }
 
         .card-3d:hover {
-            transform: translateY(-6px) rotateX(2deg);
             box-shadow: var(--shadow-3d-hover);
+            border-color: rgba(128, 0, 32, 0.25);
+            border-top-color: var(--bordeaux);
         }
 
         /* AVATAR PHOTO EN RELIEF */
@@ -375,8 +413,22 @@
             font-size: 1.15rem;
             line-height: 1.2;
             text-decoration: none;
-            transition: all 0.2s;
+            cursor: pointer;
+            user-select: none;
+            -webkit-user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+            /* Couleurs seulement : le bouton garde sa taille et sa position au survol */
+            transition: background-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
             box-shadow: 0 2px 6px rgba(128, 0, 32, 0.08);
+        }
+
+        .phone-button > * {
+            pointer-events: none;   /* le clic est toujours reçu par le bouton lui-même */
+        }
+
+        .phone-button:active {
+            box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.25);
         }
 
         .phone-button .ext-num {
@@ -385,10 +437,12 @@
             letter-spacing: 0.5px;
         }
 
-        .phone-button:hover {
+        .phone-button:hover,
+        .phone-button:focus-visible {
             background-color: var(--bordeaux);
             color: var(--white);
-            transform: scale(1.03);
+            box-shadow: 0 4px 12px rgba(128, 0, 32, 0.3);
+            outline: none;
         }
 
         .phone-svg {
@@ -492,6 +546,17 @@
             outline: none;
         }
 
+        .form-field select {
+            width: 100%;
+            padding: 12px;
+            border: 1.5px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 0.95rem;
+            outline: none;
+            background: var(--white);
+        }
+
+        .form-field select:focus,
         .form-field input:focus {
             border-color: var(--bordeaux);
         }
@@ -594,6 +659,10 @@
                 <span id="syncPill" class="sync-pill" title="État de la synchronisation">
                     <span class="sync-dot"></span><span id="syncText">Connexion…</span>
                 </span>
+                <button class="btn-call-settings" onclick="openCallModal()" title="Régler l'ouverture des appels dans Wave sur cet ordinateur">
+                    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                    Réglages d'appel
+                </button>
                 <button id="pwaInstallBtn" class="btn-install" onclick="installPwa()">Installer l'application</button>
                 <div id="adminBadge" class="badge-admin">
                     <span>MODE ADMINISTRATEUR</span>
@@ -689,6 +758,47 @@
     </div>
 
     <!-- MODALE CHANGEMENT DE MOT DE PASSE -->
+    <!-- MODALE RÉGLAGES D'APPEL (propre à chaque ordinateur) -->
+    <div class="modal-backdrop" id="callModal">
+        <div class="modal-box">
+            <h2>Réglages d'appel Wave</h2>
+            <p style="font-size:0.82rem; color:#666; margin-bottom:16px;">Ces réglages ne concernent que <strong>cet ordinateur</strong>. Essayez les combinaisons avec le bouton « Tester » jusqu'à ce que Wave compose le numéro à chaque fois.</p>
+            <form onsubmit="saveCallSettings(event)">
+                <div class="form-field">
+                    <label for="callScheme">Type de lien</label>
+                    <select id="callScheme">
+                        <option value="tel">TEL (tel:105) — recommandé</option>
+                        <option value="sip">SIP (sip:105)</option>
+                        <option value="callto">CALLTO (callto:105)</option>
+                    </select>
+                </div>
+                <div class="form-field">
+                    <label for="callHost">Adresse du standard (optionnel, liens SIP)</label>
+                    <input type="text" id="callHost" placeholder="ex : 192.168.1.10" autocomplete="off">
+                    <div class="form-hint">Si renseignée, le lien SIP devient sip:105@adresse.</div>
+                </div>
+                <div class="form-field">
+                    <label for="callMethod">Méthode d'ouverture</label>
+                    <select id="callMethod">
+                        <option value="frame">Discrète (recommandée, appels successifs)</option>
+                        <option value="direct">Directe (lien classique)</option>
+                    </select>
+                </div>
+                <div class="form-field">
+                    <label for="callTestExt">Tester avec le poste</label>
+                    <div class="test-row">
+                        <input type="text" id="callTestExt" inputmode="numeric" placeholder="ex : 100" value="100">
+                        <button type="button" class="btn-secondary" onclick="testCall()">Tester</button>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-secondary" onclick="closeCallModal()">Annuler</button>
+                    <button type="submit" class="btn-primary">Enregistrer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <div class="modal-backdrop" id="passModal">
         <div class="modal-box">
             <h2>Changer le mot de passe</h2>
@@ -728,6 +838,11 @@
            ===================================================================== */
         const CONFIG = {
             SUPABASE_URL: "https://balawbipgkncfullylkw.supabase.co",
+            /* Protocole d'appel transmis à Wave lors du clic sur un poste :
+               "tel"    -> recommandé (Wave doit être l'application par défaut pour les liens TEL)
+               "sip"    -> si Wave est associé aux liens SIP
+               "callto" -> si Wave est associé aux liens CALLTO */
+            CALL_SCHEME: "tel",
             SUPABASE_ANON_KEY: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJhbGF3YmlwZ2tuY2Z1bGx5bGt3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE0NjU4NDcsImV4cCI6MjEwNzA0MTg0N30.3ogod9hQj4cKs1i3fjZ2EjrLNzwRAlrOKrxfffTPBE4"
         };
 
@@ -966,12 +1081,101 @@
         /* ---------------------------------------------------------------------
            APPEL WAVE
            --------------------------------------------------------------------- */
+        // Réglages d'appel propres à chaque ordinateur (stockés localement).
+        // Par défaut : valeur de CONFIG.CALL_SCHEME, ouverture discrète.
+        const CALL_KEY = "afh_annuaire_appel";
+        function getCallSettings() {
+            let s = {};
+            try { s = JSON.parse(lsGet(CALL_KEY) || "{}") || {}; } catch (e) {}
+            const scheme = /^(tel|sip|callto)$/i.test(s.scheme || "") ? s.scheme.toLowerCase()
+                : (/^(tel|sip|callto)$/i.test(CONFIG.CALL_SCHEME || "") ? CONFIG.CALL_SCHEME.toLowerCase() : "tel");
+            return {
+                scheme,
+                host: String(s.host || "").trim().replace(/[^a-zA-Z0-9.\-:]/g, ""),
+                method: s.method === "direct" ? "direct" : "frame"
+            };
+        }
+
+        // Construit le lien d'appel du poste : tel:105, sip:105, sip:105@standard, callto:105
+        function callHref(ext, settings) {
+            const s = settings || getCallSettings();
+            const num = String(ext).replace(/[^0-9*#+]/g, "");
+            if (s.scheme === "sip" && s.host) return `sip:${num}@${s.host}`;
+            return `${s.scheme}:${num}`;
+        }
+
+        // Transmet le lien à Wave.
+        // Méthode "discrète" : un cadre invisible neuf à chaque appel. La page ne
+        // navigue pas, le navigateur ne garde pas d'appel « en attente » et chaque
+        // clic est bien transmis, même pour des appels successifs.
+        // Méthode "directe" : navigation classique vers le lien.
+        let lastCall = { url: "", at: 0 };
+        function launchCall(ext, settings) {
+            const s = settings || getCallSettings();
+            const url = callHref(ext, s);
+
+            // Anti double-clic : ignore le même appel répété en moins de 1,5 s
+            const now = Date.now();
+            if (url === lastCall.url && now - lastCall.at < 1500) return;
+            lastCall = { url, at: now };
+
+            if (s.method === "direct") {
+                window.location.href = url;
+            } else {
+                const frame = document.createElement("iframe");
+                frame.style.display = "none";
+                frame.setAttribute("aria-hidden", "true");
+                document.body.appendChild(frame);
+                frame.src = url;
+                setTimeout(() => frame.remove(), 4000);
+            }
+
+            // Secours : numéro copié pour le coller dans Wave si besoin
+            try {
+                if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(String(ext)).catch(() => {});
+            } catch (err) {}
+            toast(`Appel du poste ${ext} via Wave… (numéro copié)`);
+        }
+
         function makeWaveCall(ext, e) {
+            if (e) e.preventDefault();      // c'est launchCall qui transmet le lien
+            launchCall(ext);
+        }
+
+        // --- Modale des réglages d'appel
+        function openCallModal() {
+            const s = getCallSettings();
+            document.getElementById("callScheme").value = s.scheme;
+            document.getElementById("callHost").value = s.host;
+            document.getElementById("callMethod").value = s.method;
+            document.getElementById("callModal").style.display = "flex";
+        }
+
+        function closeCallModal() {
+            document.getElementById("callModal").style.display = "none";
+        }
+
+        function readCallForm() {
+            return {
+                scheme: document.getElementById("callScheme").value,
+                host: document.getElementById("callHost").value.trim().replace(/[^a-zA-Z0-9.\-:]/g, ""),
+                method: document.getElementById("callMethod").value
+            };
+        }
+
+        function testCall() {
+            const ext = document.getElementById("callTestExt").value.trim();
+            if (!ext) { toast("Saisissez un numéro de poste à tester.", true); return; }
+            lastCall = { url: "", at: 0 };
+            launchCall(ext, readCallForm());
+        }
+
+        function saveCallSettings(e) {
             e.preventDefault();
-            // Lancement du protocole Wave (wave:POSTE)
-            window.location.href = `wave:${ext}`;
-            // Fallback pour les systèmes configurés avec tel:
-            setTimeout(() => { window.location.href = `tel:${ext}`; }, 500);
+            lsSet(CALL_KEY, JSON.stringify(readCallForm()));
+            closeCallModal();
+            filterGrid();               // met à jour les liens des cartes
+            toast("Réglages d'appel enregistrés sur cet ordinateur");
         }
 
         /* ---------------------------------------------------------------------
@@ -990,6 +1194,7 @@
             }
 
             // Tri par numéro de poste (sur une copie, sans modifier la liste source)
+            const callSettings = getCallSettings();
             const sorted = data.slice().sort((a, b) => String(a.ext).localeCompare(String(b.ext), "fr", { numeric: true }));
 
             sorted.forEach(m => {
@@ -1017,7 +1222,7 @@
                     <div class="card-details">
                         <div class="name" title="${esc(m.name)}">${esc(m.name)}</div>
                         <div class="code">Code: ${esc(m.initials)}</div>
-                        <a href="wave:${ext}" data-action="call" data-ext="${ext}" class="phone-button" title="Appeler via Wave">
+                        <a href="${esc(callHref(m.ext, callSettings))}" data-action="call" data-ext="${ext}" class="phone-button" title="Appeler le poste ${ext} avec Wave">
                             <svg class="phone-svg" viewBox="0 0 24 24">
                                 <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
                             </svg>
