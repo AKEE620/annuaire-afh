@@ -451,6 +451,194 @@
             fill: currentColor;
         }
 
+        /* NUMÉROS DE TÉLÉPHONE SOUS LE POSTE */
+        .phone-list {
+            margin-top: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .phone-line {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            min-width: 0;
+        }
+
+        /* Numéro cliquable (appel via Wave) — aucun déplacement au survol */
+        .phone-num {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--dark-gray);
+            font-weight: 600;
+            font-size: 0.95rem;
+            line-height: 1.3;
+            text-decoration: none;
+            padding: 3px 8px;
+            margin-left: -8px;
+            border-radius: 8px;
+            white-space: nowrap;
+            cursor: pointer;
+            user-select: none;
+            -webkit-user-select: none;
+            transition: background-color 0.15s ease, color 0.15s ease;
+        }
+
+        .phone-num > * {
+            pointer-events: none;
+        }
+
+        .phone-num:hover,
+        .phone-num:focus-visible {
+            background-color: var(--bordeaux-light);
+            color: var(--bordeaux);
+            outline: none;
+        }
+
+        .phone-num svg {
+            width: 15px;
+            height: 15px;
+            stroke: currentColor;
+            stroke-width: 2;
+            fill: none;
+            flex-shrink: 0;
+        }
+
+        /* Pastille WhatsApp (icône blanche sur fond vert) */
+        .wa-btn {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: #25D366;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            text-decoration: none;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(37, 211, 102, 0.35);
+            transition: background-color 0.15s ease, box-shadow 0.15s ease;
+        }
+
+        .wa-btn:hover,
+        .wa-btn:focus-visible {
+            background-color: #1DA851;
+            box-shadow: 0 4px 10px rgba(29, 168, 81, 0.45);
+            outline: none;
+        }
+
+        .wa-btn > * {
+            pointer-events: none;
+        }
+
+        .wa-icon {
+            width: 17px;
+            height: 17px;
+            filter: brightness(0) invert(1);   /* icône rendue en blanc */
+        }
+
+        .wa-fallback {
+            display: none;
+            color: var(--white);
+            font-size: 0.6rem;
+            font-weight: 800;
+        }
+
+        /* SAISIE DES TÉLÉPHONES DANS LE FORMULAIRE */
+        .phone-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .form-field .phone-row .phone-input {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .form-field label.wa-toggle {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin: 0;
+            padding: 8px 10px;
+            border: 1.5px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: none;
+            cursor: pointer;
+            white-space: nowrap;
+            user-select: none;
+        }
+
+        .form-field label.wa-toggle:has(input:checked) {
+            border-color: #25D366;
+            background: rgba(37, 211, 102, 0.08);
+        }
+
+        .form-field .wa-toggle input {
+            width: auto;
+            padding: 0;
+            accent-color: #25D366;
+        }
+
+        .wa-dot {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #25D366;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .wa-dot .wa-icon {
+            width: 12px;
+            height: 12px;
+        }
+
+        .btn-row-del {
+            width: 32px;
+            height: 32px;
+            flex-shrink: 0;
+            border: none;
+            border-radius: 8px;
+            background: #F1F5F9;
+            color: #888;
+            font-size: 1.1rem;
+            cursor: pointer;
+        }
+
+        .btn-row-del:hover {
+            background: #FEE2E2;
+            color: #DC2626;
+        }
+
+        .btn-add-phone {
+            background: none;
+            border: 1.5px dashed var(--border-color);
+            border-radius: 8px;
+            padding: 8px 12px;
+            width: 100%;
+            color: var(--bordeaux);
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+        }
+
+        .btn-add-phone:hover {
+            border-color: var(--bordeaux);
+            background: var(--bordeaux-light);
+        }
+
+        @media (max-width: 420px) {
+            .wa-toggle span { display: none; }
+        }
+
         /* BOUTONS D'ACTION ADMIN SUR LA CARTE */
         .admin-card-actions {
             display: none;
@@ -679,7 +867,7 @@
                 <circle cx="11" cy="11" r="8"></circle>
                 <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
             </svg>
-            <input type="text" id="searchInput" placeholder="Rechercher par nom, code ou poste (ex: 100)..." oninput="filterGrid()">
+            <input type="text" id="searchInput" placeholder="Rechercher par nom, code, poste ou téléphone..." oninput="filterGrid()">
         </div>
 
         <div id="adminControls" class="admin-controls">
@@ -739,6 +927,12 @@
                     <input type="text" id="inputExt" required maxlength="10" inputmode="numeric" placeholder="ex: 100">
                 </div>
                 <div class="form-field">
+                    <label>Téléphones</label>
+                    <div id="phoneRows"></div>
+                    <button type="button" class="btn-add-phone" id="btnAddPhone" onclick="addPhoneRow()">+ Ajouter un numéro</button>
+                    <div class="form-hint">Format international conseillé (ex : +228 90 12 34 56). Sans indicatif, l'indicatif par défaut est ajouté automatiquement. Cochez « WhatsApp » si le numéro y est actif.</div>
+                </div>
+                <div class="form-field">
                     <label for="inputFile">Photo de profil</label>
                     <input type="file" id="inputFile" accept="image/*" style="margin-bottom:8px;" onchange="previewSelectedPhoto(event)">
                     <input type="url" id="inputPhotoUrl" placeholder="ou URL de l'image (HTTP/HTTPS)" oninput="previewUrlPhoto(this.value)">
@@ -761,7 +955,7 @@
     <!-- MODALE RÉGLAGES D'APPEL (propre à chaque ordinateur) -->
     <div class="modal-backdrop" id="callModal">
         <div class="modal-box">
-            <h2>Réglages d'appel Wave</h2>
+            <h2>Réglages d'appel et WhatsApp</h2>
             <p style="font-size:0.82rem; color:#666; margin-bottom:16px;">Ces réglages ne concernent que <strong>cet ordinateur</strong>. Essayez les combinaisons avec le bouton « Tester » jusqu'à ce que Wave compose le numéro à chaque fois.</p>
             <form onsubmit="saveCallSettings(event)">
                 <div class="form-field">
@@ -782,6 +976,19 @@
                     <select id="callMethod">
                         <option value="frame">Discrète (recommandée, appels successifs)</option>
                         <option value="direct">Directe (lien classique)</option>
+                    </select>
+                </div>
+                <div class="form-field">
+                    <label for="callPrefix">Préfixe ligne extérieure (optionnel)</label>
+                    <input type="text" id="callPrefix" maxlength="4" inputmode="numeric" placeholder="ex : 0 ou 9" autocomplete="off">
+                    <div class="form-hint">Ajouté devant les numéros de téléphone (pas devant les postes) si le standard l'exige.</div>
+                </div>
+                <div class="form-field">
+                    <label for="waMode">Ouverture de WhatsApp</label>
+                    <select id="waMode">
+                        <option value="auto">Automatique : application si installée, sinon navigateur</option>
+                        <option value="app">Directement dans l'application WhatsApp installée</option>
+                        <option value="web">Toujours WhatsApp Web (navigateur)</option>
                     </select>
                 </div>
                 <div class="form-field">
@@ -843,6 +1050,9 @@
                "sip"    -> si Wave est associé aux liens SIP
                "callto" -> si Wave est associé aux liens CALLTO */
             CALL_SCHEME: "tel",
+            /* Indicatif pays ajouté aux numéros saisis sans indicatif
+               (228 = Togo, 237 = Cameroun, 224 = Guinée...) */
+            DEFAULT_COUNTRY_CODE: "228",
             SUPABASE_ANON_KEY: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJhbGF3YmlwZ2tuY2Z1bGx5bGt3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE0NjU4NDcsImV4cCI6MjEwNzA0MTg0N30.3ogod9hQj4cKs1i3fjZ2EjrLNzwRAlrOKrxfffTPBE4"
         };
 
@@ -936,6 +1146,8 @@
            Mode "local"  : localStorage (si CONFIG non renseignée)
            --------------------------------------------------------------------- */
         const CONFIGURED = !!(CONFIG.SUPABASE_URL && CONFIG.SUPABASE_ANON_KEY);
+        // Vrai si la base Supabase n'a pas encore reçu supabase_maj_telephones.sql
+        let DB_LEGACY = false;
         const MODE = CONFIGURED ? "cloud" : "local";
         let sb = null;
         if (CONFIGURED && window.supabase) {
@@ -961,7 +1173,14 @@
                     return defaultMembers.slice();
                 }
                 if (!sb) throw new Error("Bibliothèque Supabase non chargée (hors ligne ?)");
-                const { data, error } = await sb.from("annuaire_membres").select("id, initials, name, ext, photo");
+                let { data, error } = await sb.from("annuaire_membres").select("id, initials, name, ext, photo, phones");
+                if (error && /phones/i.test(error.message || "")) {
+                    // Base pas encore mise à jour : lecture sans les téléphones
+                    DB_LEGACY = true;
+                    ({ data, error } = await sb.from("annuaire_membres").select("id, initials, name, ext, photo"));
+                } else if (!error) {
+                    DB_LEGACY = false;
+                }
                 if (error) throw rpcError(error);
                 lsSet(CACHE_KEY, JSON.stringify(data));
                 return data;
@@ -980,10 +1199,12 @@
                     lsSet(LOCAL_DB_KEY, JSON.stringify(list));
                     return;
                 }
-                const { error } = await sb.rpc("annuaire_enregistrer", {
+                const args = {
                     p_pass: pass, p_id: m.id || null,
                     p_initials: m.initials, p_name: m.name, p_ext: m.ext, p_photo: m.photo || ""
-                });
+                };
+                if (!DB_LEGACY) args.p_phones = m.phones || [];
+                const { error } = await sb.rpc("annuaire_enregistrer", args);
                 if (error) throw rpcError(error);
             },
 
@@ -1003,7 +1224,8 @@
                     initials: String(x.initials || "").toUpperCase().trim(),
                     name: String(x.name || "").trim(),
                     ext: String(x.ext || "").trim(),
-                    photo: safePhoto(x.photo)
+                    photo: safePhoto(x.photo),
+                    phones: cleanPhones(x.phones)
                 })).filter(x => x.name && x.ext);
                 if (MODE === "local") {
                     lsSet(LOCAL_DB_KEY, JSON.stringify(clean.map((x, i) => ({ ...x, id: String(Date.now() + i) }))));
@@ -1081,6 +1303,86 @@
         /* ---------------------------------------------------------------------
            APPEL WAVE
            --------------------------------------------------------------------- */
+        /* ---------------------------------------------------------------------
+           NUMÉROS DE TÉLÉPHONE ET WHATSAPP
+           Chaque collaborateur a une liste "phones" : [{ num: "22890123456", wa: true }, ...]
+           Les numéros sont stockés au format international, chiffres uniquement.
+           --------------------------------------------------------------------- */
+        // Icône WhatsApp officielle (jeu d'icônes Simple Icons, mis en cache par sw.js)
+        const WA_ICON = "https://cdn.jsdelivr.net/npm/simple-icons@13.21.0/icons/whatsapp.svg";
+        const MAX_PHONES = 6;
+
+        // "+228 90 12 34 56" / "0022890123456" / "90123456" -> "22890123456"
+        function normPhone(raw) {
+            const s = String(raw ?? "").trim();
+            let d = s.replace(/\D/g, "");
+            if (!d) return "";
+            if (s.startsWith("+")) return d;                 // déjà international
+            if (d.startsWith("00")) return d.slice(2);       // 00 + indicatif
+            if (d.length <= 9) {                             // numéro national : ajout de l'indicatif par défaut
+                const cc = String(CONFIG.DEFAULT_COUNTRY_CODE || "").replace(/\D/g, "");
+                return cc + d.replace(/^0+/, "");
+            }
+            return d;
+        }
+
+        // Nettoie une liste de numéros (import, formulaire)
+        function cleanPhones(arr) {
+            const seen = new Set();
+            return (Array.isArray(arr) ? arr : [])
+                .map(p => ({ num: normPhone(p && typeof p === "object" ? p.num : p), wa: !!(p && p.wa === true) }))
+                .filter(p => p.num.length >= 6 && p.num.length <= 15 && !seen.has(p.num) && seen.add(p.num))
+                .slice(0, MAX_PHONES);
+        }
+
+        // Longueur de l'indicatif pays (pour l'affichage uniquement)
+        function ccLength(d) {
+            if (/^[17]/.test(d)) return 1;
+            if (/^2[07]/.test(d)) return 2;
+            if (/^2/.test(d)) return 3;                      // Afrique : 228, 237, 224, 225...
+            if (/^(35|37|38|42|50|59|67|68|69|85|88|96|97|99)/.test(d)) return 3;
+            return 2;
+        }
+
+        // "22890123456" -> "+228 90 12 34 56" ; "237699123456" -> "+237 6 99 12 34 56"
+        function formatPhone(num) {
+            const d = String(num || "").replace(/\D/g, "");
+            if (d.length < 6) return d;
+            const L = ccLength(d);
+            let rest = d.slice(L);
+            const parts = [];
+            while (rest.length > 2) { parts.unshift(rest.slice(-2)); rest = rest.slice(0, -2); }
+            if (rest) parts.unshift(rest);
+            return `+${d.slice(0, L)} ${parts.join(" ")}`;
+        }
+
+        // Numéro à composer via Wave : national si même pays, sinon 00 + international,
+        // précédé du préfixe de ligne extérieure éventuel.
+        function externalDial(num, s) {
+            const cc = String(CONFIG.DEFAULT_COUNTRY_CODE || "").replace(/\D/g, "");
+            const d = String(num).replace(/\D/g, "");
+            const body = (cc && d.startsWith(cc) && d.length > cc.length + 5) ? d.slice(cc.length) : "00" + d;
+            return (s.prefix || "") + body;
+        }
+
+        // Lien WhatsApp selon le réglage de l'ordinateur
+        function waLink(num, mode) {
+            if (mode === "app") return { href: `whatsapp://send?phone=${num}`, target: "" };
+            if (mode === "web") return { href: `https://web.whatsapp.com/send?phone=${num}`, target: "afh_whatsapp" };
+            return { href: `https://wa.me/${num}`, target: "_blank" };   // page officielle : application ou navigateur
+        }
+
+        // Ouvre un lien d'application (tel:, whatsapp:...) dans un cadre invisible neuf :
+        // la page ne bouge pas et chaque clic est bien transmis.
+        function openViaFrame(url) {
+            const frame = document.createElement("iframe");
+            frame.style.display = "none";
+            frame.setAttribute("aria-hidden", "true");
+            document.body.appendChild(frame);
+            frame.src = url;
+            setTimeout(() => frame.remove(), 4000);
+        }
+
         // Réglages d'appel propres à chaque ordinateur (stockés localement).
         // Par défaut : valeur de CONFIG.CALL_SCHEME, ouverture discrète.
         const CALL_KEY = "afh_annuaire_appel";
@@ -1092,7 +1394,9 @@
             return {
                 scheme,
                 host: String(s.host || "").trim().replace(/[^a-zA-Z0-9.\-:]/g, ""),
-                method: s.method === "direct" ? "direct" : "frame"
+                method: s.method === "direct" ? "direct" : "frame",
+                prefix: String(s.prefix || "").replace(/[^0-9*#]/g, "").slice(0, 4),
+                wa: ["app", "web"].includes(s.wa) ? s.wa : "auto"
             };
         }
 
@@ -1110,7 +1414,7 @@
         // clic est bien transmis, même pour des appels successifs.
         // Méthode "directe" : navigation classique vers le lien.
         let lastCall = { url: "", at: 0 };
-        function launchCall(ext, settings) {
+        function launchCall(ext, settings, label, copyText) {
             const s = settings || getCallSettings();
             const url = callHref(ext, s);
 
@@ -1122,24 +1426,38 @@
             if (s.method === "direct") {
                 window.location.href = url;
             } else {
-                const frame = document.createElement("iframe");
-                frame.style.display = "none";
-                frame.setAttribute("aria-hidden", "true");
-                document.body.appendChild(frame);
-                frame.src = url;
-                setTimeout(() => frame.remove(), 4000);
+                openViaFrame(url);
             }
 
             // Secours : numéro copié pour le coller dans Wave si besoin
             try {
-                if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(String(ext)).catch(() => {});
+                if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(String(copyText || ext)).catch(() => {});
             } catch (err) {}
-            toast(`Appel du poste ${ext} via Wave… (numéro copié)`);
+            toast(`Appel ${label || "du poste " + ext} via Wave… (numéro copié)`);
         }
 
         function makeWaveCall(ext, e) {
             if (e) e.preventDefault();      // c'est launchCall qui transmet le lien
             launchCall(ext);
+        }
+
+        // Clic sur un numéro de téléphone : appel via Wave
+        function dialPhone(num, e) {
+            if (e) e.preventDefault();
+            const s = getCallSettings();
+            const label = formatPhone(num);
+            launchCall(externalDial(num, s), s, `du ${label}`, label);
+        }
+
+        // Clic sur la pastille WhatsApp
+        function openWhatsApp(num, e) {
+            const s = getCallSettings();
+            if (s.wa === "app") {
+                if (e) e.preventDefault();
+                openViaFrame(waLink(num, "app").href);
+                toast("Ouverture de la discussion WhatsApp…");
+            }
+            // "auto" et "web" : le lien s'ouvre normalement dans un onglet
         }
 
         // --- Modale des réglages d'appel
@@ -1148,6 +1466,8 @@
             document.getElementById("callScheme").value = s.scheme;
             document.getElementById("callHost").value = s.host;
             document.getElementById("callMethod").value = s.method;
+            document.getElementById("callPrefix").value = s.prefix;
+            document.getElementById("waMode").value = s.wa;
             document.getElementById("callModal").style.display = "flex";
         }
 
@@ -1159,7 +1479,9 @@
             return {
                 scheme: document.getElementById("callScheme").value,
                 host: document.getElementById("callHost").value.trim().replace(/[^a-zA-Z0-9.\-:]/g, ""),
-                method: document.getElementById("callMethod").value
+                method: document.getElementById("callMethod").value,
+                prefix: document.getElementById("callPrefix").value.replace(/[^0-9*#]/g, "").slice(0, 4),
+                wa: document.getElementById("waMode").value
             };
         }
 
@@ -1203,6 +1525,24 @@
                 const photo = safePhoto(m.photo);
                 const ext = esc(m.ext);
 
+                // Numéros de téléphone sous le poste
+                const phonesHtml = (Array.isArray(m.phones) ? m.phones : []).map(p => {
+                    const num = String(p && p.num || "").replace(/\D/g, "");
+                    if (num.length < 6) return "";
+                    const label = esc(formatPhone(num));
+                    const wa = p.wa === true ? waLink(num, callSettings.wa) : null;
+                    return `
+                        <div class="phone-line">
+                            <a href="${esc(callHref(externalDial(num, callSettings), callSettings))}" class="phone-num" data-action="dial" data-num="${num}" title="Appeler le ${label} avec Wave">
+                                <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2" width="12" height="20" rx="2.5"></rect><line x1="11" y1="18" x2="13" y2="18"></line></svg>
+                                <span>${label}</span>
+                            </a>
+                            ${wa ? `<a href="${esc(wa.href)}"${wa.target ? ` target="${wa.target}" rel="noopener"` : ""} class="wa-btn" data-action="wa" data-num="${num}" title="Discuter avec ${esc(m.name)} sur WhatsApp (${label})" aria-label="WhatsApp ${label}">
+                                <img class="wa-icon" src="${WA_ICON}" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'"><span class="wa-fallback">WA</span>
+                            </a>` : ""}
+                        </div>`;
+                }).join("");
+
                 const avatarContent = photo
                     ? `<img src="${esc(photo)}" alt="${esc(m.name)}" class="avatar-img" loading="lazy">`
                     : `<span>${esc(m.initials)}</span>`;
@@ -1228,6 +1568,7 @@
                             </svg>
                             <span>Poste <span class="ext-num">${ext}</span></span>
                         </a>
+                        ${phonesHtml ? `<div class="phone-list">${phonesHtml}</div>` : ""}
                     </div>
                 `;
                 grid.appendChild(card);
@@ -1240,6 +1581,8 @@
             if (!el) return;
             const action = el.dataset.action;
             if (action === "call") makeWaveCall(el.dataset.ext, e);
+            else if (action === "dial") dialPhone(el.dataset.num, e);
+            else if (action === "wa") openWhatsApp(el.dataset.num, e);
             else if (action === "edit") openEditModal(el.dataset.id);
             else if (action === "delete") deleteMember(el.dataset.id);
         });
@@ -1247,10 +1590,12 @@
         // RECHERCHE EN TEMPS RÉEL
         function filterGrid() {
             const query = document.getElementById("searchInput").value.toLowerCase().trim();
+            const digits = query.replace(/\D/g, "");
             const filtered = membersList.filter(m =>
                 String(m.name).toLowerCase().includes(query) ||
                 String(m.initials).toLowerCase().includes(query) ||
-                String(m.ext).includes(query)
+                String(m.ext).includes(query) ||
+                (digits.length >= 3 && (Array.isArray(m.phones) ? m.phones : []).some(p => String(p.num || "").includes(digits)))
             );
             renderGrid(filtered);
         }
@@ -1331,12 +1676,65 @@
         /* ---------------------------------------------------------------------
            MODALE AJOUT / MODIFICATION
            --------------------------------------------------------------------- */
+        // Lignes de saisie des téléphones
+        function renderPhoneRows(phones) {
+            document.getElementById("phoneRows").innerHTML = "";
+            const list = Array.isArray(phones) && phones.length ? phones : [{ num: "", wa: false }];
+            list.forEach(p => addPhoneRow(p));
+        }
+
+        function addPhoneRow(p) {
+            const box = document.getElementById("phoneRows");
+            if (box.children.length >= MAX_PHONES) return;
+            const row = document.createElement("div");
+            row.className = "phone-row";
+            row.innerHTML = `
+                <input type="tel" class="phone-input" maxlength="22" placeholder="+228 90 12 34 56" autocomplete="off">
+                <label class="wa-toggle" title="Ce numéro est actif sur WhatsApp">
+                    <input type="checkbox" class="wa-check">
+                    <span class="wa-dot"><img class="wa-icon" src="${WA_ICON}" alt="" onerror="this.remove()"></span>
+                    <span>WhatsApp</span>
+                </label>
+                <button type="button" class="btn-row-del" title="Retirer ce numéro" aria-label="Retirer ce numéro">×</button>`;
+            row.querySelector(".phone-input").value = p && p.num ? formatPhone(p.num) : "";
+            row.querySelector(".wa-check").checked = !!(p && p.wa);
+            row.querySelector(".btn-row-del").addEventListener("click", () => {
+                row.remove();
+                if (!box.children.length) addPhoneRow();
+                updateAddPhoneBtn();
+            });
+            box.appendChild(row);
+            updateAddPhoneBtn();
+            if (!p) row.querySelector(".phone-input").focus();
+        }
+
+        function updateAddPhoneBtn() {
+            const n = document.getElementById("phoneRows").children.length;
+            document.getElementById("btnAddPhone").style.display = n >= MAX_PHONES ? "none" : "block";
+        }
+
+        // Lit les numéros saisis : { list: [{num, wa}], invalid: ["saisie incorrecte", ...] }
+        function readPhoneRows() {
+            const list = [], invalid = [], seen = new Set();
+            document.querySelectorAll("#phoneRows .phone-row").forEach(row => {
+                const raw = row.querySelector(".phone-input").value.trim();
+                if (!raw) return;
+                const num = normPhone(raw);
+                if (num.length < 6 || num.length > 15) { invalid.push(raw); return; }
+                if (seen.has(num)) return;
+                seen.add(num);
+                list.push({ num, wa: row.querySelector(".wa-check").checked });
+            });
+            return { list, invalid };
+        }
+
         function openAddModal() {
             document.getElementById("modalTitle").innerText = "Ajouter un Collaborateur";
             document.getElementById("memberForm").reset();
             document.getElementById("editMemberId").value = "";
             currentPhotoData = "";
             updatePhotoPreview("");
+            renderPhoneRows([]);
             document.getElementById("memberModal").style.display = "flex";
         }
 
@@ -1355,6 +1753,7 @@
 
             currentPhotoData = member.photo || "";
             updatePhotoPreview(currentPhotoData);
+            renderPhoneRows(member.phones || []);
 
             document.getElementById("memberModal").style.display = "flex";
         }
@@ -1410,12 +1809,18 @@
         async function saveMember(e) {
             e.preventDefault();
             const btn = document.getElementById("btnSaveMember");
+            const phones = readPhoneRows();
+            if (phones.invalid.length) {
+                toast(`Numéro invalide : « ${phones.invalid[0]} ». Vérifiez la saisie.`, true);
+                return;
+            }
             const member = {
                 id: document.getElementById("editMemberId").value || null,
                 initials: document.getElementById("inputInitials").value.toUpperCase().trim(),
                 name: document.getElementById("inputName").value.trim(),
                 ext: document.getElementById("inputExt").value.trim(),
-                photo: safePhoto(currentPhotoData)
+                photo: safePhoto(currentPhotoData),
+                phones: phones.list
             };
 
             btn.disabled = true;
@@ -1425,7 +1830,11 @@
                 closeMemberModal();
                 await refresh();
                 const pourTous = MODE === "cloud" ? " pour tous" : "";
-                toast((member.id ? "Collaborateur mis à jour" : "Collaborateur ajouté") + pourTous);
+                if (MODE === "cloud" && DB_LEGACY && member.phones.length) {
+                    toast("Collaborateur enregistré SANS ses numéros : exécutez d'abord supabase_maj_telephones.sql dans Supabase.", true);
+                } else {
+                    toast((member.id ? "Collaborateur mis à jour" : "Collaborateur ajouté") + pourTous);
+                }
             } catch (err) {
                 handleWriteError(err);
             } finally {
